@@ -1,38 +1,55 @@
-# frozen_string_literal: true
+require 'date'
 
-# BEGIN
 module Model
-
-  def self.included(base)
-    base.extend Model
-  end
-
-  attr_reader :attributes, :attr
-
-  def initialize(attributes = {})
+  def initialize(attrs = {})
     @attributes = {}
-    self.class.attr.each_key do |name|
-      @attributes[name] = send("#{name}=", attributes[name])
+    self.class.attribute_options.each do |name, options|
+      value = attrs.key?(name) ? attrs[name] : options.fetch(:default, nil)
+      write_attribute(name, value)
     end
   end
 
-  def attribute(name, **options)
-    @attr ||= {}
-    @attr[name] = { **options }
+  def write_attribute(name, value)
+    options = self.class.attribute_options[name]
+    @attributes[name] = self.class.convert(value, options[:type])
+  end
 
-    define_method(name) do
-      @attributes[name]
+  module ClassMethods
+    def attribute_options
+      @attribute_options || {}
     end
 
-    define_method("#{name}=") do |value|
-      value = DateTime.parse(value) if options[:type] == :datetime && !value.nil?
+    def attribute(name, options = {})
+      @attribute_options ||= {}
+      attribute_options[name] = options
 
-      if @attributes[name] == options[:default]
-        return @attributes[name] = value
+      define_method :"#{name}" do
+        @attributes[name]
       end
 
-      @attributes[name] = value || options[:default]
+      define_method :"#{name}=" do |value|
+        write_attribute(name, value)
+      end
+    end
+
+    def convert(value, target_type)
+      return value if value.nil?
+
+      case target_type
+      when :datetime
+        DateTime.parse value
+      when :integer
+        Integer value
+      when :string
+        String value
+      when :boolean
+        !!value
+      end
     end
   end
+
+  def self.included(base)
+    base.attr_reader :attributes
+    base.extend ClassMethods
+  end
 end
-# END
