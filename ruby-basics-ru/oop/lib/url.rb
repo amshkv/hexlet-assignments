@@ -11,12 +11,12 @@ class Url
   def initialize(url)
     @url = URI(url)
     @query_params = retrieve_query_params_from_query_string
-    @memoized_params = {}
   end
 
   def_delegators :@url, :scheme, :host, :to_s
 
   def query_param(key, default = nil)
+    @memoized_params ||= {}
     @memoized_params[key] ||= query_params.fetch(key, default)
   end
 
