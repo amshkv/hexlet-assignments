@@ -4,10 +4,10 @@ class Router
   def call(env)
     # BEGIN
     req = Rack::Request.new(env)
-    mapper = { '/' => 'Hello, World!', '/about' => 'About page' }
+    routes = { '/' => 'Hello, World!', '/about' => 'About page' }
 
-    if mapper.keys.include?(req.path)
-      [200, {}, [mapper[req.path]]]
+    if routes.keys.include?(req.path)
+      [200, {}, [routes[req.path]]]
     else
       [404, {}, ['404 Not Found']]
     end
