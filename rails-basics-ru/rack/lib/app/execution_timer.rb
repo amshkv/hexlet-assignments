@@ -10,6 +10,6 @@ class ExecutionTimer
     status, headers, body = @app.call(env)
     time_in_miliseconds = ((Time.now - prev_time) * 1000).ceil
 
-    [status, headers, [body, "Execution time: #{time_in_miliseconds}ms"].join('\n')]
+    [status, headers, body.concat(["Execution time: #{time_in_miliseconds}ms"])]
   end
 end

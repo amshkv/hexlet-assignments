@@ -11,7 +11,7 @@ class Signature
     # BEGIN
     status, headers, body = @app.call(env)
 
-    [status, headers, [body, Digest::SHA256.hexdigest(body)].join('\n')]
+    [status, headers, body.concat([Digest::SHA256.hexdigest(body.join)])]
     # END
   end
 end

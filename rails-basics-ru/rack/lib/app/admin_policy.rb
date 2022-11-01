@@ -11,7 +11,7 @@ class AdminPolicy
     # BEGIN
     req = Rack::Request.new(env)
 
-    return [403, {}, 'Forbidden'] if req.path.start_with?('/admin')
+    return [403, {}, ['Forbidden']] if req.path.start_with?('/admin')
 
     @app.call(env)
     # END
