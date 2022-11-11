@@ -7,18 +7,19 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 Task.create(
-  name: 'First Task',
-  status: 'lalajopa',
-  creator: 'Andrey',
-  performer: 'Vasya',
-  completed: false
+  name: Faker::Artist.name,
+  description: Faker::Movies::HarryPotter.quote,
+  status: Faker::Movies::HarryPotter.spell,
+  creator: Faker::Movies::HarryPotter.character,
+  performer: Faker::Movies::HarryPotter.character,
+  completed: Faker::Boolean.boolean
 )
 
 Task.create(
-  name: 'Second Task',
-  status: 'jopalala',
-  description: 'Some description',
-  creator: 'Andrey',
-  performer: 'Vasya',
-  completed: true
+  name: Faker::Artist.name,
+  description: Faker::Movies::HarryPotter.quote,
+  status: Faker::Movies::HarryPotter.spell,
+  creator: Faker::Movies::HarryPotter.character,
+  performer: Faker::Movies::HarryPotter.character,
+  completed: Faker::Boolean.boolean
 )

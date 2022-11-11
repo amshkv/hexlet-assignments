@@ -3,6 +3,14 @@ require "test_helper"
 class TasksControllerTest < ActionDispatch::IntegrationTest
   setup do
     @task = tasks(:one)
+    @attrs = {
+      name: Faker::Artist.name,
+      description: Faker::Movies::HarryPotter.quote,
+      status: Faker::Movies::HarryPotter.spell,
+      creator: Faker::Movies::HarryPotter.character,
+      performer: Faker::Movies::HarryPotter.character,
+      completed: Faker::Boolean.boolean
+    }
   end
 
   test 'should get index' do
@@ -26,25 +34,35 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create task' do
-    assert_difference('Task.count') do
-      post tasks_url, params: {
-        task: { name: 'lala', description: 'jopa', status: 'new', creator: 'me', performer: 'you', completed: false }
-      }
-    end
-    assert_redirected_to task_url(Task.last)
+    # NOTE: scaffolded code
+    # assert_difference('Task.count') do
+    #   post tasks_url, params: {
+    #     task: { name: 'lala', description: 'jopa', status: 'new', creator: 'me', performer: 'you', completed: false }
+    #   }
+    # end
+    # assert_redirected_to task_url(Task.last)
+
+    post tasks_url, params: { task: @attrs }
+    task = Task.find_by!(name: @attrs[:name])
+    assert_redirected_to task_url(task)
   end
 
   test 'should update task' do
-    patch task_url(@task), params: { task: { name: 'lalajopa' } }
-    assert_redirected_to task_path(@task)
+    patch task_url(@task), params: { task: @attrs }
+    assert_redirected_to task_url(@task)
     @task.reload
-    assert_equal 'lalajopa', @task.name
+    assert { @task.name == @attrs[:name] }
   end
 
   test 'should destroy task' do
-    assert_difference('Task.count', -1) do
-      delete task_url(@task)
-    end
+    # NOTE: scaffolded code
+    # assert_difference('Task.count', -1) do
+    #   delete task_url(@task)
+    # end
+    # assert_redirected_to tasks_url
+
+    delete task_url(@task)
     assert_redirected_to tasks_url
+    assert { !Task.exists?(@task.id) }
   end
 end
