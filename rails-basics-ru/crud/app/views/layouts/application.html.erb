@@ -17,6 +17,11 @@
     <li><%= link_to 'Tasks', tasks_path %></li>
     <%# END %>
   </ul>
+    <% if flash.any? %>
+      <% flash.each do |key, value| %>
+        <div class="<%= key %>"><%= value %></div>
+      <% end %>
+    <% end %>
     <%= yield %>
   </body>
 </html>

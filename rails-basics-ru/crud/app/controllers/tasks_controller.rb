@@ -17,9 +17,11 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
 
     if @task.save
+      flash[:notice] = 'Task was successfully created'
       redirect_to task_path(@task)
     else
-      render :new
+      flash[:error] = 'Task cannot be created'
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -31,15 +33,18 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
 
     if @task.update(task_params)
+      flash[:notice] = 'Task was successfully updated'
       redirect_to task_path(@task)
     else
-      render :edit
+      flash[:error] = 'Task cannot be updated'
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @task = Task.find(params[:id])
     @task.destroy
+    flash[:notice] = 'Task was successfully deleted'
     redirect_to tasks_path
   end
 

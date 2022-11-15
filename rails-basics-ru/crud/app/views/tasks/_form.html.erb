@@ -1,29 +1,53 @@
-<%= form_with model: @task do |form| %>
-  <p>
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-  </p>
-  <p>
-    <%= form.label :description %>
-    <%= form.text_field :description %>
-  </p>
-  <p>
-    <%= form.label :status %>
-    <%= form.text_field :status %>
-  </p>
-  <p>
-    <%= form.label :creator %>
-    <%= form.text_field :creator %>
-  </p>
-  <p>
-    <%= form.label :performer %>
-    <%= form.text_field :performer %>
-  </p>
-  <p>
-    <%= form.label :completed %>
-    <%= form.select :completed, [true, false] %>
-  </p>
-  <p>
-    <%= form.submit %>
-  </p>
+<%= form_with model: task do |form| %>
+  <div>
+    <div><%= form.label :name %></div>
+    <div><%= form.text_field :name %></div>
+    <% task.errors.full_messages_for(:name).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+    <br>
+  </div>
+  <div>
+    <div><%= form.label :description %></div>
+    <div><%= form.text_field :description %></div>
+    <% task.errors.full_messages_for(:description).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+    <br>
+  </div>
+  <div>
+    <div><%= form.label :status %></div>
+    <div><%= form.text_field :status %></div>
+    <% task.errors.full_messages_for(:status).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+    <br>
+  </div>
+  <div>
+    <div><%= form.label :creator %></div>
+    <div><%= form.text_field :creator %></div>
+    <% task.errors.full_messages_for(:creator).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+    <br>
+  </div>
+  <div>
+    <div><%= form.label :performer %></div>
+    <div><%= form.text_field :performer %></div>
+    <% task.errors.full_messages_for(:performer).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+    <br>
+  </div>
+  <div>
+    <div><%= form.label :completed %></div>
+    <div><%= form.select :completed, [true, false] %></div>
+    <% task.errors.full_messages_for(:completed).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+    <br>
+  </div>
+  <div>
+    <div><%= form.submit %></div>
+  </div>
 <% end %>
