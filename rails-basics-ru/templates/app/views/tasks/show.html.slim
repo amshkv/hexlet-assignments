@@ -1,0 +1,23 @@
+h1
+  | Task
+p
+  | Name:
+  = @task.name
+p
+  | Description:
+  = @task.description
+p
+  | Status:
+  = @task.status
+p
+  | Creator:
+  = @task.creator
+p
+  | Performer:
+  = @task.performer
+p
+  | Completed?
+  = @task.completed
+= link_to 'Edit', edit_task_path(@task)
+|  |
+= link_to 'Delete', task_path(@task), method: :delete

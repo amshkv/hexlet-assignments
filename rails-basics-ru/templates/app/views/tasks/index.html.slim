@@ -1,0 +1,35 @@
+h1
+  | Tasks
+p
+  = link_to 'New Task', new_task_path
+table
+  thead
+    tr
+      th
+        | Name
+      th
+        | Description
+      th
+        | Status
+      th
+        | Creator
+      th
+        | Performer
+      th
+        | Completed
+  tbody
+    - @tasks.each do |task|
+      tr
+
+      td
+        = link_to task.name, task_path(task)
+      td
+        = task.description
+      td
+        = task.status
+      td
+        = task.creator
+      td
+        = task.performer
+      td
+        = task.completed
