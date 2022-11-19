@@ -1,0 +1,14 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# BEGIN
+DEFAULTS: &DEFAULTS
+  name: $LABEL
+
+new:
+  <<: *DEFAULTS
+
+in_progress:
+  <<: *DEFAULTS
+
+done:
+  <<: *DEFAULTS
+# END
