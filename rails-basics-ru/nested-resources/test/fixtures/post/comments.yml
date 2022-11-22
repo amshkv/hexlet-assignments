@@ -1,0 +1,7 @@
+one:
+  body: One body
+  post: one
+
+two:
+  body: Two body
+  post: one

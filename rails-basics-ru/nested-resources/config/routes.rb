@@ -5,7 +5,9 @@ Rails.application.routes.draw do
 
   # BEGIN
   resources :posts do
-    resources :comments, only: %i[create destroy]
+    scope module: :posts do
+      resources :comments, only: %i[create edit update destroy]
+    end
   end
   # END
 end

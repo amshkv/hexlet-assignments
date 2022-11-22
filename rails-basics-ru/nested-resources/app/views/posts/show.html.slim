@@ -4,20 +4,24 @@ p
   strong.me-2 Body:
   = @post.body
 / BEGIN
+
+h3 Comments
+
 = simple_form_for @comment, url: post_comments_path(@post.id) do |f|
   = f.input :body
   = f.button :submit, class: 'btn-primary'
 
 - @post.comments.each do |comment|
-  - if comment.id
-    .card.mt-3
-      .card-body
-        = comment.body
-
-        = link_to 'Delete', post_comment_path(@post, comment), method: :delete, class: 'btn btn-danger', confirm: 'Are you sure?'
+  / - if comment.id
+  .card.mt-3
+    .card-body
+      = comment.body
+    .card-footer
+      = link_to 'Edit', edit_post_comment_path(@post, comment), class: 'btn btn-outline-primary me-2'
+      = link_to 'Delete', post_comment_path(@post, comment), method: :delete, class: 'btn btn-danger', confirm: 'Are you sure?'
 / END
 hr
 
 .d-flex
-  = link_to 'Edit', edit_post_path(@post), class: 'btn btn-outline-primary mr-2'
+  = link_to 'Edit', edit_post_path(@post), class: 'btn btn-outline-primary me-2'
   = link_to 'Back', :back, class: 'btn btn-outline-primary'
