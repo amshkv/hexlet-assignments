@@ -35,18 +35,3 @@ en:
   destroy: Delete
   destroy_confirmation: Are you sure?
   back: Back
-
-
-  layouts:
-    application:
-      title: Blog
-      hexlet_title: © Hexlet, 2022
-    shared:
-      nav:
-        hexlet_logo: Hexlet logo
-        home: Home
-        posts: Posts
-
-  home:
-    index:
-      title: Home page

@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
   # BEGIN
   root 'home#index'
-  scope '/:locale' do
+  scope '/(:locale)', locale: /en|ru/ do
     resources :posts do
       scope module: :posts do
         resources :comments, only: %i[create update edit destroy]
