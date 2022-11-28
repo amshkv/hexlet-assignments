@@ -3,14 +3,23 @@
 require 'csv'
 
 namespace :hexlet do
-  desc 'Import Users from CV file'
-  task :import_users, [:path] => :environment do |_task, args|
-    path = args[:path]
-    CSV.foreach(path, headers: true) do |row|
-      first_name, last_name, birthday, email = row.fields
-      month, day, year = birthday.split('/')
-      date = Date.parse("#{year}-#{month}-#{day}")
-      User.create!(first_name: first_name, last_name: last_name, birthday: date, email: email)
+  desc 'Hexlet tasks'
+
+  task :import_users, %i[data_path] => :environment do |_task, args|
+    path = args[:data_path]
+
+    abort 'Data path is required!' unless path
+    puts path
+    abort 'Cant find data file!' unless File.exist?(path)
+
+    data = File.read(path)
+
+    csv = CSV.parse(data, headers: true)
+    csv.each do |row|
+      parsed_birthday = DateTime.strptime(row['birthday'], '%m/%d/%Y')
+      User.create!(row.to_hash.merge(birthday: parsed_birthday))
     end
+
+    puts 'Successfuly loaded!'
   end
 end
