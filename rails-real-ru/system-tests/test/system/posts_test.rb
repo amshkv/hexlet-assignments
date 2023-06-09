@@ -8,33 +8,45 @@ class PostsTest < ApplicationSystemTestCase
     visit posts_url
 
     assert_selector 'h1', text: 'Posts'
-    assert_selector 'table'
-    assert_selector 'a', text: 'New Post'
   end
 
   test 'creating a Post' do
+    params = {
+      title: Faker::Book.title,
+      body: Faker::Books::Dune.quote
+    }
+
     visit posts_url
 
     click_on 'New Post'
 
-    fill_in 'Title', with: 'Creating a Post'
-    fill_in 'Body', with: 'Created this post successfully!'
+    fill_in 'Title', with: params[:title]
+    fill_in 'Body', with: params[:body]
 
     click_on 'Create Post'
 
     assert_text 'Post was successfully created'
+    assert_text params[:title]
+    assert_text params[:body]
   end
 
   test 'updating a Post' do
     visit posts_url
     click_on 'Edit', match: :first
 
-    fill_in 'Title', with: 'Creating a Post'
-    fill_in 'Body', with: 'Created this post successfully!'
+    params = {
+      title:Faker::Movies::HarryPotter.book,
+      body: Faker::Movies::HarryPotter.quote
+    }
+
+    fill_in 'Title', with: params[:title]
+    fill_in 'Body', with: params[:body]
 
     click_on 'Update Post'
 
     assert_text 'Post was successfully updated'
+    assert_text params[:title]
+    assert_text params[:body]
   end
 
   test 'destroying a Post' do
