@@ -24,11 +24,10 @@ class VacanciesController < ApplicationController
   def publish
     vacancy = Vacancy.find(params[:id])
 
-    if vacancy.may_publish?
-      vacancy.publish!
+    if vacancy.publish!
       redirect_to vacancies_path, notice: 'Vacancy was successfully published.'
     else
-      redirect_to vacancies_path, notice: 'Vacancy was not published.'
+      redirect_to vacancies_path, alert: 'Vacancy was not published.'
     end
   end
 
@@ -38,7 +37,7 @@ class VacanciesController < ApplicationController
     if vacancy.archive!
       redirect_to vacancies_path, notice: 'Vacancy was successfully archived.'
     else
-      redirect_to vacancies_path, status: :unprocessable_entity, notice: 'Vacancy was not archived.'
+      redirect_to vacancies_path, alert: 'Vacancy was not archived.'
     end
   end
   # END
