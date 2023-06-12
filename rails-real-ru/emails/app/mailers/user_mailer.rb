@@ -9,7 +9,7 @@ class UserMailer < ApplicationMailer
   def account_activation
     # BEGIN
     @user = params[:user]
-    mail to: @user.email, subject: t('.subject')
+    mail to: @user.email
     # END
   end
 end
