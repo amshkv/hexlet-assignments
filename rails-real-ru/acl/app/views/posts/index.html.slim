@@ -25,7 +25,7 @@ table.table.table-striped.table-hover.mb-5
             = link_to t('edit'), edit_post_path(post), class: 'me-4'
           / END
           - if policy(post).destroy?
-            = link_to t('destroy'), post_path(post), 'data-turbo-method': :delete, class: 'me-4'
+            = link_to t('destroy'), post, data: { turbo_method: :delete, turbo_confirm: t('destroy_confirmation') }, class: 'link-danger'
 
 / new post link
 / BEGIN
