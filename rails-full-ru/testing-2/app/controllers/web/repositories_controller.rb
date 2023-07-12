@@ -21,22 +21,24 @@ class Web::RepositoriesController < Web::ApplicationController
     # BEGIN
     @repository = Repository.new(permitted_params)
 
-    repository = Octokit::Repository.from_url(@repository.link)
-
-    response = Octokit.repository(repository)
-    json_response = JSON.parse(response)
-
-    @repository.owner_name = json_response['owner']['login']
-    @repository.repo_name = json_response['name']
-    @repository.description = json_response['description']
-    @repository.default_branch = json_response['default_branch']
-    @repository.watchers_count = json_response['watchers_count']
-    @repository.language = json_response['language']
-    @repository.repo_created_at = json_response['created_at']
-    @repository.repo_updated_at = json_response['updated_at']
-
     if @repository.save
-      redirect_to repositories_path, notice: t('success')
+      client = Octokit::Client.new
+
+      octokit_repo = Octokit::Repository.from_url(@repository.link)
+
+      github_data = client.repository(octokit_repo)
+
+      @repository.update!(
+        repo_name: github_data[:name],
+        owner_name: github_data[:owner][:login],
+        description: github_data[:description],
+        default_branch: github_data[:default_branch],
+        watchers_count: github_data[:watchers_count],
+        language: github_data[:language],
+        repo_created_at: github_data[:created_at],
+        repo_updated_at: github_data[:updated_at]
+      )
+      redirect_to @repository, notice: t('success')
     else
       flash[:notice] = t('fail')
       render :new, status: :unprocessable_entity

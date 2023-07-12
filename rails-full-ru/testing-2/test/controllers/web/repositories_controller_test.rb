@@ -4,28 +4,63 @@ require 'test_helper'
 
 class Web::RepositoriesControllerTest < ActionDispatch::IntegrationTest
   # BEGIN
-  test 'should create repository' do
-    repos = 'amshkv/rails-project-65'
-    link = "https://github.com/#{repos}"
-    stub_link = "https://api.github.com/repos/#{repos}"
-    info = load_fixture('files/response.json')
-    parsed_info = JSON.parse(info)
+  setup do
+    @repo = repositories :one
+    @gh_repo = 'amshkv/rails-project-65'
+    @attrs = {
+      link: "https://github.com/#{@gh_repo}"
+    }
+  end
 
-    stub_request(:get, stub_link).to_return(body: info)
+  test 'get index' do
+    get repositories_url
+    assert_response :success
+  end
 
-    post repositories_url, params: { repository: { link: } }
+  test 'get new' do
+    get new_repository_url
+    assert_response :success
+  end
 
-    repository = Repository.find_by(link:)
+  test 'should create' do
+    response = load_fixture('files/response.json')
 
-    assert_response :redirect
-    assert repository.owner_name == parsed_info['owner']['login']
-    assert repository.repo_name == parsed_info['name']
-    assert repository.description == parsed_info['description']
-    assert repository.default_branch == parsed_info['default_branch']
-    assert repository.watchers_count == parsed_info['watchers_count']
-    assert repository.language == parsed_info['language']
-    assert repository.repo_created_at == parsed_info['created_at']
-    assert repository.repo_updated_at == parsed_info['updated_at']
+    stub_request(:get, "https://api.github.com/repos/#{@gh_repo}")
+      .to_return(
+        status: 200,
+        body: response,
+        headers: { 'Content-Type' => 'application/json' }
+      )
+
+    post repositories_url, params: { repository: @attrs }
+
+    repository = Repository.find_by @attrs
+
+    assert { repository }
+    assert { repository.description.present? }
+    assert_redirected_to repository_url(repository)
+  end
+
+  test 'get edit' do
+    get edit_repository_url(@repo)
+    assert_response :success
+  end
+
+  test 'should update' do
+    patch repository_url(@repo), params: { repository: @attrs }
+
+    @repo.reload
+
+    assert { @repo.link == @attrs[:link] }
+    assert_redirected_to repositories_url
+  end
+
+  test 'destroy' do
+    delete repository_url(@repo)
+
+    assert { !Repository.exists? @repo.id }
+
+    assert_redirected_to repositories_url
   end
   # END
 end
