@@ -18,7 +18,7 @@ class Web::RepositoriesController < Web::ApplicationController
     @repository = Repository.new(permitted_params)
 
     if @repository.save
-      RepositoryLoaderJob.perform_later(@repository)
+      RepositoryLoaderJob.perform_later(@repository.id)
       redirect_to @repository, notice: t('success')
     else
       flash[:notice] = t('fail')
@@ -31,20 +31,20 @@ class Web::RepositoriesController < Web::ApplicationController
     # BEGIN
     repository = Repository.find(params[:id])
 
-    if repository.save
-      RepositoryLoaderJob.perform_later(repository)
-      redirect_to repository, notice: t('success')
-    else
-      redirect_to repository, notice: t('fall')
-    end
+    RepositoryLoaderJob.perform_later(repository.id)
+    redirect_to repositories_path, notice: t('success')
     # END
   end
 
   def update_repos
     # BEGIN
-    Repository.all.order(updated_at: :desc).each do |repository|
-      RepositoryLoaderJob.perform_later(repository)
+
+    repositories = Repository.all.order(updated_at: :desc)
+    repositories.each do |repository|
+      RepositoryLoaderJob.perform_later(repository.id)
     end
+
+    redirect_to repositories_path, notice: t('success')
     # END
   end
 

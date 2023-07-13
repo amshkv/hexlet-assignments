@@ -5,14 +5,15 @@ require 'octokit'
 class RepositoryLoaderJob < ApplicationJob
   queue_as :default
 
-  def perform(repository)
+  def perform(repository_id)
+    repository = Repository.find(repository_id)
+
+    repository.fetch!
+
     client = Octokit::Client.new
+    github_repo = Octokit::Repository.from_url(repository.link)
 
-    octokit_repo = Octokit::Repository.from_url(repository.link)
-
-    repository.to_fetching!
-
-    github_data = client.repository(octokit_repo)
+    github_data = client.repository(github_repo)
 
     repository.update!(
       repo_name: github_data[:name],
@@ -25,8 +26,8 @@ class RepositoryLoaderJob < ApplicationJob
       repo_updated_at: github_data[:updated_at]
     )
 
-    repository.to_fetched!
-  rescue Octokit::Error
-    repository.to_failed!
+    repository.mark_as_fetched!
+  rescue StandardError
+    repository.mark_as_failed!
   end
 end

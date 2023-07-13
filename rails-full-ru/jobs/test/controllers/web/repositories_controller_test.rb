@@ -35,6 +35,7 @@ class Web::RepositoriesControllerTest < ActionDispatch::IntegrationTest
 
     repository = Repository.find_by @attrs
 
+
     assert { repository.fetched? }
     assert { repository.owner_name == 'hexlet' }
     assert { repository.repo_name == 'hexlet-friends' }
